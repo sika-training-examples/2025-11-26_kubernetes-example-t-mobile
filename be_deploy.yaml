@@ -21,6 +21,18 @@ spec:
           env:
             - name: REDIS
               value: redis
+            - name: SLOW_START
+              value: '20'
+            - name: EXTRA_TEXT
+              value: v3
+          startupProbe:
+            httpGet:
+              path: /api/readyz
+              port: 8000
+          livenessProbe:
+            httpGet:
+              path: /api/livez
+              port: 8000
           resources:
             requests:
               cpu: 50m
