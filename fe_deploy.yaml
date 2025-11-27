@@ -13,14 +13,23 @@ spec:
       labels:
         app: fe
     spec:
+      initContainers:
+        - name: wait-for-backend
+          image: ghcr.io/sikalabs/slu:v0.95.2
+          command:
+            - /bin/sh
+            - -c
+            - slu wait-for http200 --url http://be/api/readyz
       containers:
         - name: main
-          image: ghcr.io/ondrejsika/counter-frontend
+          image: ghcr.io/ondrejsika/counter-frontend-go
           ports:
             - containerPort: 3000
           env:
             - name: API_ORIGIN
               value: http://be
+            - name: FAIL_ON_ERROR
+              value: '1'
           startupProbe:
             httpGet:
               path: /api/livez
