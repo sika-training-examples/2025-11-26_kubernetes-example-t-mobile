@@ -13,6 +13,14 @@ spec:
       labels:
         app: be
     spec:
+      serviceAccountName: be-migrations
+      initContainers:
+        - name: wait-for-migrations
+          image: sikalabs/kubectl
+          command:
+            - /bin/sh
+            - -c
+            - sleep 2 && kubectl wait --for=condition=complete --timeout=600s job/be-migrations
       containers:
         - name: main
           image: ghcr.io/ondrejsika/counter
@@ -22,9 +30,9 @@ spec:
             - name: REDIS
               value: redis
             - name: SLOW_START
-              value: '20'
+              value: '5'
             - name: EXTRA_TEXT
-              value: v3
+              value: v5
           startupProbe:
             httpGet:
               path: /api/readyz
