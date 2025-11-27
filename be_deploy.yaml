@@ -4,7 +4,7 @@ metadata:
   name: be
 spec:
   revisionHistoryLimit: 0
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: be
@@ -19,8 +19,8 @@ spec:
           ports:
             - containerPort: 8000
           env:
-            - name: BACKEND
-              value: inmemory
+            - name: REDIS
+              value: redis
           resources:
             requests:
               cpu: 50m
